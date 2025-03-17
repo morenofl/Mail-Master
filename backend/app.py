@@ -1,7 +1,15 @@
 from flask import Flask, jsonify, request
-
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
+
+@app.route('/test', methods=['GET'])
+def test_connection():
+    return jsonify({"message": "Frontend successfully connected to Backend!"})
+
+
+    
 @app.route('/top-emails', methods=['GET'])
 def get_top_emails():
     sample_data = {

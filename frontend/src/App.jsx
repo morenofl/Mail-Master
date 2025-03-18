@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Emails from './components/Emails.jsx';
+import Home from './components/Home.jsx';
+
 
 
 function App() {
@@ -7,7 +9,11 @@ function App() {
 
   return (
     <>
-      <Emails />
+      <div className='container'>
+
+        <Home />
+      </div>
+
     </>
   )
 }

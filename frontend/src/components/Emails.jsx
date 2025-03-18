@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { testConnection, getTopEmails } from '../api.js';
+import { testConnection, getTopEmails, fetchEmails } from '../api.js';
+import './Emails.css';
 
 export default function Emails() {
 	const [emails, setEmails] = useState([]);
 
 	const fetchData = async () => {
 		try {
-			const data = await getTopEmails();
+			const data = await fetchEmails();
 			console.log(data);
 			setEmails(data);
 		} catch (error) {
@@ -22,13 +23,13 @@ export default function Emails() {
 	}, []);
 	return (
 		<>
-			<div>
+			<div className="pageContainer">
 				<h1>Top Email Senders</h1>
 				<ul>
 					{emails.map((email, index) => {
 						return (
 							<li key={index}>
-								{email.email} - {email.count} emails
+								{email.address} - {email.count} emails
 							</li>
 						)
 

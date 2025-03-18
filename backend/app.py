@@ -4,6 +4,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from oauthlib.oauth2 import WebApplicationClient
 import os
+import re
 import pickle
 from flask_cors import CORS
 app = Flask(__name__)
@@ -58,20 +59,31 @@ def get_emails():
         results = service.users().messages().list(userId='me').execute()
         messages = results.get('messages', [])
 
-        email_data = []
-
+        
+        email_count_dict = {}
         for msg in messages:
             msg_detail = service.users().messages().get(userId='me', id=msg['id']).execute()
             
             headers = msg_detail['payload']['headers']
             sender = next(header['value'] for header in headers if header['name'] == 'From')
+            email_address = re.search(r'<(.+)>', sender).group(1)
+            
+                
+            
+            if email_address in email_count_dict:
+                email_count_dict[email_address] += 1
+            else:
+                email_count_dict[email_address] = 1
 
-            email_data.append({
-                "email": sender,
-                "subject": msg_detail['snippet']  # Short preview of email content
-            })
-
-        return jsonify(email_data)
+        email_count_data = []
+        for email_address in email_count_dict:
+            email = {
+                "address": email_address,
+                "count": email_count_dict[email_address]
+            }
+            email_count_data.append(email)
+            
+        return jsonify(email_count_data)
 
     except Exception as e:
         print(f"Error: {e}")

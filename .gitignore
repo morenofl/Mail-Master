@@ -1,0 +1,8 @@
+cert.crt
+cert.key
+token.pickle
+credentials.json
+venv/
+cert.csr
+.DS_Store
+backend/.DS_Store
